@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TwinLend</title>
+    <style>
+        /* General styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: rgb(255, 255, 255);
+            position: relative;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        #navbar ul {
+            list-style-type: none;
+            text-align: center;
+        }
+
+        #navbar ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        #navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #navbar ul li a:hover {
+            background-color: #06B4D1;
+        }
+
+        section {
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        form div {
+            margin-bottom: 20px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"],
+        form input[type="number"],
+        form textarea,
+        form select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            background-color: #06B4D1;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        form button:hover {
+            background-color: #333;
+        }
+
+        /* Twin card styles */
+        .twin-card {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            width: 200px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .twin-card h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .twin-card p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        /* Pool card styles */
+        .pool-card {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            width: 200px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .pool-card h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .pool-card p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        /* 3D image effect */
+        .twin-card img,
+        .pool-card img {
+            width: 100%;
+            height: 200px;
+            border-radius: 10px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .twin-card img:hover,
+        .pool-card img:hover {
+            transform: rotateY(180deg);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .close-btn {
+            float: right;
+            cursor: pointer;
+        }
+
+        /* Footer styles */
+        footer {
+            background: #111;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header id="header">
+        <nav id="navbar">
+            <ul>
+                <li><a href="#create-digital-twin">Create Digital Twin</a></li>
+                <li><a href="#digital-twin-collection">Digital Twin Collection</a></li>
+                <li><a href="#pool">Create a Pool</a></li>
+                <li><a href="#pool-collection">Pool Collection</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Create Digital Twin Form -->
+    <section id="create-digital-twin" class="section">
+        <h2>Create Digital Twin</h2>
+        <form id="digital-twin-form">
+            <div>
+                <label for="twin-name">Twin Name:</label>
+                <input type="text" id="twin-name" required>
+            </div>
+            <div>
+                <label for="twin-description">Twin Description:</label>
+                <textarea id="twin-description" required></textarea>
+            </div>
+            <div>
+                <label for="twin-image">Twin Image:</label>
+                <input type="file" id="twin-image" required accept="image/*">
+            </div>
+            <div>
+                <label for="twin-effect">Twin Effect:</label>
+                <select id="twin-effect">
+                    <option value="pixelate">Pixelate</option>
+                    <option value="sketch">Sketch</option>
+                </select>
+            </div>
+            <button type="button" onclick="addToCollection()">Add to Collection</button>
+        </form>
+    </section>
+
+    <!-- Digital Twin Collection -->
+    <section id="digital-twin-collection" class="section">
+        <h2>Digital Twin Collection</h2>
+        <div id="digital-twin-cards">
+            <!-- Digital Twin Cards will be inserted here -->
+        </div>
+    </section>
+
+    <!-- Create a Pool -->
+    <section id="pool" class="section">
+        <h2>Create a Pool</h2>
+        <form id="create-pool-form">
+            <div>
+                <label for="luxury-item-name">Luxury Item Name:</label>
+                <input type="text" id="luxury-item-name" required>
+            </div>
+            <div>
+                <label for="market-value">Market Value (USDC):</label>
+                <input type="number" id="market-value" required min="0">
+            </div>
+            <div>
+                <label for="max-borrow">Max Borrow (20% of Market Value):</label>
+                <input type="number" id="max-borrow" readonly>
+            </div>
+            <div>
+                <label for="interest-rate">Interest Rate (% per month):</label>
+                <input type="number" id="interest-rate" required min="0">
+            </div>
+            <div>
+                <label for="loan-duration">Loan Duration (months):</label>
+                <input type="number" id="loan-duration" required min="1">
+            </div>
+            <div>
+                <label for="pool-image">Pool Image:</label>
+                <input type="file" id="pool-image" required accept="image/*">
+            </div>
+            <div>
+                <label for="pool-parts">Pool Parts:</label>
+                <select id="pool-parts">
+                    <option value="10">10 parts</option>
+                    <option value="100">100 parts</option>
+                </select>
+            </div>
+            <button type="button" onclick="createPool()">Create Pool</button>
+        </form>
+    </section>
+
+    <!-- Pool Collection -->
+    <section id="pool-collection" class="section">
+        <h2>Pool Collection</h2>
+        <div id="pool-cards">
+            <!-- Pool Cards will be inserted here -->
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Participation in Pool</h2>
+            <p>Enter the number of parts you want to lend:</p>
+            <input type="number" id="part-amount" min="1" max="10" placeholder="Max 10 parts">
+            <button onclick="lendPart()">Lend</button>
+            <p id="parts-left"></p>
+        </div>
+    </div>
+
+    <script>
+        function addToCollection() {
+            const twinName = document.getElementById('twin-name').value;
+            const twinDescription = document.getElementById('twin-description').value;
+            const twinImage = document.getElementById('twin-image').files[0];
+            const twinEffect = document.getElementById('twin-effect').value;
+
+            const reader = new FileReader();
+            reader.readAsDataURL(twinImage);
+            reader.onload = function (e) {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function () {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+
+                    if (twinEffect === 'pixelate') {
+                        const pixelSize = 10;
+                        for (let y = 0; y < canvas.height; y += pixelSize) {
+                            for (let x = 0; x < canvas.width; x += pixelSize) {
+                                const pixelData = ctx.getImageData(x, y, pixelSize, pixelSize);
+                                const averageColor = getAverageColor(pixelData);
+                                ctx.fillStyle = `rgba(${averageColor.r}, ${averageColor.g}, ${averageColor.b}, ${averageColor.a})`;
+                                ctx.fillRect(x, y, pixelSize, pixelSize);
+                            }
+                        }
+                    } else if (twinEffect === 'sketch') {
+                        ctx.filter = 'grayscale(100%)';
+                        ctx.globalCompositeOperation = 'color-dodge';
+                        ctx.drawImage(img, 0, 0);
+                    }
+
+                    const twinCard = `
+                        <div class="twin-card">
+                            <img src="${canvas.toDataURL()}" alt="${twinName}">
+                            <div>
+                                <h3>${twinName}</h3>
+                                <p>Description: ${twinDescription}</p>
+                                <p>Effect: ${twinEffect}</p>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('digital-twin-cards').innerHTML += twinCard;
+                };
+            };
+        }
+
+        function getAverageColor(pixelData) {
+            let r = 0;
+            let g = 0;
+            let b = 0;
+            let a = 0;
+            const length = pixelData.data.length / 4;
+
+            for (let i = 0; i < length; i++) {
+                r += pixelData.data[i * 4];
+                g += pixelData.data[i * 4 + 1];
+                b += pixelData.data[i * 4 + 2];
+                a += pixelData.data[i * 4 + 3];
+            }
+
+            r = Math.floor(r / length);
+            g = Math.floor(g / length);
+            b = Math.floor(b / length);
+            a = Math.floor(a / length);
+
+            return { r, g, b, a };
+        }
+
+        function createPool() {
+            const luxuryItemName = document.getElementById('luxury-item-name').value;
+            const marketValue = parseFloat(document.getElementById('market-value').value);
+            const maxBorrow = marketValue * 0.2;
+            const interestRate = parseFloat(document.getElementById('interest-rate').value);
+            const loanDuration = parseFloat(document.getElementById('loan-duration').value);
+            const poolImage = document.getElementById('pool-image').files[0];
+            const poolParts = parseInt(document.getElementById('pool-parts').value);
+
+            const reader = new FileReader();
+            reader.readAsDataURL(poolImage);
+            reader.onload = function (e) {
+                const poolCard = `
+                    <div class="pool-card" id="${luxuryItemName}">
+                        <img src="${e.target.result}" alt="${luxuryItemName}">
+                        <div>
+                            <h3>${luxuryItemName}</h3>
+                            <p>Market Value: ${marketValue} USDC</p>
+                            <p>Max Borrow: ${maxBorrow.toFixed(2)} USDC</p>
+                            <p>Interest Rate: ${interestRate}% per month</p>
+                            <p>Loan Duration: ${loanDuration} months</p>
+                            <button onclick="openModal('${luxuryItemName}', ${poolParts})">Participate</button>
+                            <div id="participants-${luxuryItemName}"></div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('pool-cards').innerHTML += poolCard;
+            };
+
+            let activePools = JSON.parse(localStorage.getItem('activePools') || '[]');
+            activePools.push({
+                luxuryItemName,
+                marketValue,
+                maxBorrow,
+                interestRate,
+                loanDuration,
+                poolParts,
+                participants: []
+            });
+            localStorage.setItem('activePools', JSON.stringify(activePools));
+        }
+
+        function openModal(poolName, parts) {
+            const modal = document.getElementById('modal');
+            modal.style.display = 'block';
+            document.getElementById('part-amount').max = parts;
+            document.getElementById('parts-left').textContent = `Parts left: ${parts}`;
+            document.getElementById('modal').dataset.poolName = poolName;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function lendPart() {
+            const partAmount = parseInt(document.getElementById('part-amount').value);
+            const poolName = document.getElementById('modal').dataset.poolName;
+            let activePools = JSON.parse(localStorage.getItem('activePools'));
+            const poolIndex = activePools.findIndex(pool => pool.luxuryItemName === poolName);
+
+            if (activePools[poolIndex].participants.length < activePools[poolIndex].poolParts) {
+                activePools[poolIndex].participants.push(partAmount);
+                localStorage.setItem('activePools', JSON.stringify(activePools));
+                displayParticipants(poolName);
+                document.getElementById('parts-left').textContent = `Parts left: ${activePools[poolIndex].poolParts - activePools[poolIndex].participants.length}`;
+            } else {
+                alert('All parts have been lent for this pool.');
+                closeModal();
+            }
+        }
+
+        function displayParticipants(poolName) {
+            const activePools = JSON.parse(localStorage.getItem('activePools'));
+            const pool = activePools.find(pool => pool.luxuryItemName === poolName);
+            const participantDiv = document.getElementById(`participants-${poolName}`);
+            participantDiv.innerHTML = '';
+            pool.participants.forEach((part, index) => {
+                const participant = document.createElement('p');
+                participant.textContent = `Lender ${index + 1} has lent ${part} part${part > 1 ? 's' : ''}.`;
+                participantDiv.appendChild(participant);
+            });
+        }
+
+        function updateMaxBorrow() {
+            const marketValue = parseFloat(document.getElementById('market-value').value);
+            const maxBorrow = marketValue * 0.2;
+            document.getElementById('max-borrow').value = maxBorrow.toFixed(2);
+        }
+
+        document.getElementById('market-value').addEventListener('input', updateMaxBorrow);
+
+        displayActivePools();
+
+    </script>
+
+    <footer id="footer">
+        <p>&copy; 2024 TwinLend. All Rights Reserved.</p>
+    </footer>
+</body>
+
+</html>
